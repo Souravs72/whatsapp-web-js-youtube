@@ -31,10 +31,11 @@ server.listen(port, () => {
   console.log("listening on *:", port);
 });
 const allSessionsObject = {};
+var client = null;
 const createWhatsappSession = (id, socket) => {
-  const client = new Client({
+  client = new Client({
     puppeteer: {
-      headless: false,
+      headless: true,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
       executablePath: '/usr/bin/chromium-browser'
     },
@@ -69,13 +70,38 @@ const createWhatsappSession = (id, socket) => {
     });
   });
 
+  client.on('message_create', message => {
+    if (message.body === 'ping') {
+      client.sendMessage(message.from, 'pong');
+    }
+  });
+  client.on('message', async (message) => {
+    console.log(message);
+    try {
+      if (message.from != "status@broadcast") {
+        const contact = await message.getContact();
+        console.log(contact, message.body);
+        const finalNumber = sanitize(phoneNumber);
+        client.sendMessage(finalNumber, message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  client.on('loading_screen', (percent, message) => {
+    console.log('Loading screen', percent, message);
+    socket.emit('loading_screen', { percent, message }); // Emit loading status
+  });
+
+
   client.initialize();
 };
 
 const getWhatsappSession = (id, socket) => {
-  const client = new Client({
+  client = new Client({
     puppeteer: {
-      headless: false,
+      headless: true,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
       executablePath: '/usr/bin/chromium-browser'
     },
@@ -101,6 +127,31 @@ const getWhatsappSession = (id, socket) => {
       message: "your got logged out and here is QR code",
     });
   });
+
+  client.on('message_create', message => {
+    if (message.body === 'ping') {
+      client.sendMessage(message.from, 'pong');
+    }
+  });
+  client.on('message', async (message) => {
+    console.log(message);
+    try {
+      if (message.from != "status@broadcast") {
+        const contact = await message.getContact();
+        console.log(contact, message.body);
+        const finalNumber = sanitize(phoneNumber);
+        client.sendMessage(finalNumber, message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  client.on('loading_screen', (percent, message) => {
+    console.log('Loading screen', percent, message);
+    socket.emit('loading_screen', { percent, message }); // Emit loading status
+  });
+
 
   client.initialize();
 };
@@ -138,4 +189,23 @@ io.on("connection", (socket) => {
       allChats,
     });
   });
+  socket.on('chat_message', async (data) => {
+    const { phoneNumber, message, id } = data;
+    const finalNumber = sanitize(phoneNumber);
+    
+    if (client) {
+      try {
+        client.sendMessage(finalNumber, message);
+        console.log('Sent message to: ' + finalNumber);
+      } catch (err) {
+        console.error('Error sending message:', err);
+      }
+    } else {
+      console.log('Client is not connected');
+    }
+  });
 });
+const sanitize = (phoneNumber) => {
+  const sanitizedPhoneNumber = phoneNumber.replace(/[^0-9]/g, '');
+  return '91' + sanitizedPhoneNumber.slice(-10) + '@c.us';
+};
