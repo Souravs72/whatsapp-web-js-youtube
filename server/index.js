@@ -8,10 +8,9 @@ const http = require("http");
 const server = http.createServer(app);
 const { MongoStore } = require("wwebjs-mongo");
 const mongoose = require("mongoose");
-const MONGO_URI =
-  process.env.MONGO_URI
-let store;
+const MONGO_URI = process.env.MONGO_URI
 
+let store;
 mongoose.connect(MONGO_URI).then(() => {
   console.log("hello connected mongoDB");
   store = new MongoStore({ mongoose: mongoose });
@@ -77,11 +76,14 @@ const getWhatsappSession = (id, socket) => {
   const client = new Client({
     puppeteer: {
       headless: false,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      executablePath: '/usr/bin/chromium-browser'
     },
     authStrategy: new RemoteAuth({
       clientId: id,
       store: store,
       backupSyncIntervalMs: 300000,
+      dataPath: 'session'
     }),
   });
 
