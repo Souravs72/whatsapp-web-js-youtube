@@ -1,0 +1,164 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+body {
+    background-color: lightgray;
+}
+
+.App {
+    margin: 4rem;
+}
+
+.App-logo {
+    height: 40vmin;
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .App-logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
+}
+
+.App-link {
+    color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* 
+  .form {
+    width: 50%;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  .label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  .container {
+    margin-bottom: 2rem;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+  }
+  .input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  .button {
+    padding: 4px 8px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: large;
+    border-radius: 4px;
+    border-color: wheat;
+    cursor: pointer;
+    width: 150px;
+  }
+  textarea {
+    height: 100%;
+  }
+  .button:hover {
+    background-color: royalblue;
+    color: white;
+    border-color: white;
+  }
+   */
+.Message {
+    background-color: 'lightGray';
+}
+
+.container {
+    width: fit-content;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+
+}
+
+h1,
+p {
+    text-align: center;
+    margin-bottom: 20px;
+    color: gray;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+}
+
+label {
+    display: block;
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 18px;
+    color: grey;
+    width: 150px;
+}
+
+input[type="text"],
+textarea,
+select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-inline: 10px;
+    width: 300px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+button {
+    background-color: #4c77af;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+}
+
+.Flex {
+    display: flex;
+    justify-content: space-between;
+    margin-right: 8rem;
+}
+
+.qr {
+    background-color: rgb(43, 48, 46);
+}
